@@ -14,6 +14,12 @@
 		CEC738982B896039006ADEC7 /* Assign2_Group3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC738972B896039006ADEC7 /* Assign2_Group3Tests.swift */; };
 		CEC738A22B896039006ADEC7 /* Assign2_Group3UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC738A12B896039006ADEC7 /* Assign2_Group3UITests.swift */; };
 		CEC738A42B896039006ADEC7 /* Assign2_Group3UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC738A32B896039006ADEC7 /* Assign2_Group3UITestsLaunchTests.swift */; };
+		CED0D08C2B8B7B8500EFFC14 /* Maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0892B8B7B8500EFFC14 /* Maze.cpp */; };
+		CED0D08D2B8B7B8500EFFC14 /* DisjointSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED0D08B2B8B7B8500EFFC14 /* DisjointSet.cpp */; };
+		CED0D0922B8B7D7400EFFC14 /* MazeWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0912B8B7D7400EFFC14 /* MazeWrapper.m */; };
+		CED0D0952B8B973500EFFC14 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0942B8B973500EFFC14 /* MainScene.swift */; };
+		CED0D0972B8B97F300EFFC14 /* MainSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0962B8B97F300EFFC14 /* MainSceneViewModel.swift */; };
+		CED0D0992B8B991E00EFFC14 /* SceneKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0982B8B991E00EFFC14 /* SceneKitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +50,16 @@
 		CEC7389D2B896039006ADEC7 /* Assign2-Group3UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Assign2-Group3UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEC738A12B896039006ADEC7 /* Assign2_Group3UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assign2_Group3UITests.swift; sourceTree = "<group>"; };
 		CEC738A32B896039006ADEC7 /* Assign2_Group3UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assign2_Group3UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CED0D0872B8B7B8300EFFC14 /* Assign2-Group3-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Assign2-Group3-Bridging-Header.h"; sourceTree = "<group>"; };
+		CED0D0882B8B7B8500EFFC14 /* DisjointSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisjointSet.h; sourceTree = "<group>"; };
+		CED0D0892B8B7B8500EFFC14 /* Maze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Maze.cpp; sourceTree = "<group>"; };
+		CED0D08A2B8B7B8500EFFC14 /* Maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Maze.h; sourceTree = "<group>"; };
+		CED0D08B2B8B7B8500EFFC14 /* DisjointSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisjointSet.cpp; sourceTree = "<group>"; };
+		CED0D0902B8B7D3E00EFFC14 /* MazeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeWrapper.h; sourceTree = "<group>"; };
+		CED0D0912B8B7D7400EFFC14 /* MazeWrapper.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MazeWrapper.m; sourceTree = "<group>"; };
+		CED0D0942B8B973500EFFC14 /* MainScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
+		CED0D0962B8B97F300EFFC14 /* MainSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSceneViewModel.swift; sourceTree = "<group>"; };
+		CED0D0982B8B991E00EFFC14 /* SceneKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +111,17 @@
 			isa = PBXGroup;
 			children = (
 				CEC738862B896035006ADEC7 /* Assign2_Group3App.swift */,
+				CED0D0872B8B7B8300EFFC14 /* Assign2-Group3-Bridging-Header.h */,
 				CEC738882B896035006ADEC7 /* ContentView.swift */,
+				CED0D0942B8B973500EFFC14 /* MainScene.swift */,
+				CED0D0962B8B97F300EFFC14 /* MainSceneViewModel.swift */,
+				CED0D0982B8B991E00EFFC14 /* SceneKitView.swift */,
+				CED0D0902B8B7D3E00EFFC14 /* MazeWrapper.h */,
+				CED0D0912B8B7D7400EFFC14 /* MazeWrapper.m */,
+				CED0D08B2B8B7B8500EFFC14 /* DisjointSet.cpp */,
+				CED0D0882B8B7B8500EFFC14 /* DisjointSet.h */,
+				CED0D0892B8B7B8500EFFC14 /* Maze.cpp */,
+				CED0D08A2B8B7B8500EFFC14 /* Maze.h */,
 				CEC7388A2B896038006ADEC7 /* Assets.xcassets */,
 				CEC7388C2B896038006ADEC7 /* Preview Content */,
 			);
@@ -195,6 +221,7 @@
 				TargetAttributes = {
 					CEC738822B896035006ADEC7 = {
 						CreatedOnToolsVersion = 15.2;
+						LastSwiftMigration = 1520;
 					};
 					CEC738922B896038006ADEC7 = {
 						CreatedOnToolsVersion = 15.2;
@@ -257,6 +284,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED0D08D2B8B7B8500EFFC14 /* DisjointSet.cpp in Sources */,
+				CED0D08C2B8B7B8500EFFC14 /* Maze.cpp in Sources */,
+				CED0D0992B8B991E00EFFC14 /* SceneKitView.swift in Sources */,
+				CED0D0972B8B97F300EFFC14 /* MainSceneViewModel.swift in Sources */,
+				CED0D0922B8B7D7400EFFC14 /* MazeWrapper.m in Sources */,
+				CED0D0952B8B973500EFFC14 /* MainScene.swift in Sources */,
 				CEC738892B896035006ADEC7 /* ContentView.swift in Sources */,
 				CEC738872B896035006ADEC7 /* Assign2_Group3App.swift in Sources */,
 			);
@@ -419,6 +452,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Assign2-Group3/Preview Content\"";
@@ -438,6 +472,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "comp8051.Assign2-Group3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Assign2-Group3/Assign2-Group3-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -448,6 +484,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Assign2-Group3/Preview Content\"";
@@ -467,6 +504,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "comp8051.Assign2-Group3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Assign2-Group3/Assign2-Group3-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
