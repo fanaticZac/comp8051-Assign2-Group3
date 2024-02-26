@@ -15,12 +15,15 @@ struct ContentView: View {
             if isGameStarted {
                 SceneKitView(scene: mainSceneViewModel.scene)
                     .gesture(DragGesture().onChanged { value in
-                        let sensitivity: Float = 0.01 // Adjust the sensitivity of the drag
+                        let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
                         let cameraXOffset = Float(value.translation.width) * sensitivity
                         let cameraZOffset = -Float(value.translation.height) * sensitivity
                         
                         mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
                     })
+                    .onTapGesture(count:2) {
+                        mainSceneViewModel.scene.resetCameraPosition()
+                    }
                     .edgesIgnoringSafeArea(.all)
             } else {
                 StartScreenView {

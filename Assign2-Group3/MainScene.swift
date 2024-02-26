@@ -13,6 +13,7 @@ class MainScene: SCNScene {
     var cameraYOffset: Float = 20
     var cameraZOffset: Float = 5
     let mazeWrapper: MazeWrapper = MazeWrapper(rows: 10, columns: 10)
+    var touched = false
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -42,7 +43,18 @@ class MainScene: SCNScene {
     }
     
     func updateCameraPosition(cameraXOffset: Float, cameraZOffset: Float) {
-        cameraNode.position = SCNVector3(cameraXOffset, cameraZOffset, cameraZOffset)
+        // Moves camera to player on first touch
+        if (!touched) {
+            cameraNode.position = SCNVector3(0,0,0)
+            cameraNode.eulerAngles = SCNVector3(0,-Float.pi/2,0)
+            touched = true
+        }
+        cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+    }
+    
+    func resetCameraPosition() {
+        // Resets camera to start of maze on double tap
+        cameraNode.position = SCNVector3(0,0,0)
     }
   
     // MAZE // ////////////
