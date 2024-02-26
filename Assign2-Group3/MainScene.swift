@@ -52,9 +52,6 @@ class MainScene: SCNScene {
         if (cameraXOffset * 1000 < 2 && cameraXOffset * 1000 > -2 && cameraZOffset != 0) {
             cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraZOffset, 0)
         }
-        else if (cameraNode.eulerAngles.y > 0) {
-            cameraNode.position = SCNVector3(cameraNode.position.x - cameraXOffset, 0, cameraNode.position.z - cameraZOffset)
-        }
         else {
             cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
         }
