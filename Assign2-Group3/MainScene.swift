@@ -49,12 +49,20 @@ class MainScene: SCNScene {
             cameraNode.eulerAngles = SCNVector3(0,-Float.pi/2,0)
             touched = true
         }
-        cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+        if (cameraXOffset * 1000 < 2 && cameraXOffset * 1000 > -2 && cameraZOffset != 0) {
+            cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraZOffset, 0)
+        }
+        else if (cameraNode.eulerAngles.y > 0) {
+            cameraNode.position = SCNVector3(cameraNode.position.x - cameraXOffset, 0, cameraNode.position.z - cameraZOffset)
+        }
+        else {
+            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+        }
     }
     
     func resetCameraPosition() {
-        // Resets camera to start of maze on double tap
         cameraNode.position = SCNVector3(0,0,0)
+        cameraNode.eulerAngles = SCNVector3(0,-Float.pi/2,0)
     }
   
     // MAZE // ////////////
@@ -125,7 +133,12 @@ class MainScene: SCNScene {
             rootNode.addChildNode(mazeNode)
         }
 
-
+    func toggleFog(fogStart: CGFloat, fogEnd: CGFloat, fogDensity: CGFloat) {
+        fogColor = UIColor.cyan
+        fogStartDistance = fogStart
+        fogEndDistance = fogEnd
+        fogDensityExponent = fogDensity
+    }
     
    
 }

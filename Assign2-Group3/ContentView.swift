@@ -16,8 +16,8 @@ struct ContentView: View {
                 SceneKitView(scene: mainSceneViewModel.scene)
                     .gesture(DragGesture().onChanged { value in
                         let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
-                        let cameraXOffset = Float(value.translation.width) * sensitivity
-                        let cameraZOffset = -Float(value.translation.height) * sensitivity
+                        let cameraXOffset = -Float(value.translation.height) * sensitivity
+                        let cameraZOffset = Float(value.translation.width) * sensitivity
                         
                         mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
                     })
