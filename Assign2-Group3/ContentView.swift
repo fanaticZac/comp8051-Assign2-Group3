@@ -12,7 +12,8 @@ struct ContentView: View {
     @State private var isGameStarted = false // State to track if the game has started
     
     var body: some View {
-            if isGameStarted {
+        if isGameStarted {
+            ZStack {
                 SceneKitView(scene: mainSceneViewModel.scene)
                     .gesture(DragGesture().onChanged { value in
                         let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
@@ -25,13 +26,19 @@ struct ContentView: View {
                         mainSceneViewModel.scene.resetCameraPosition()
                     }
                     .edgesIgnoringSafeArea(.all)
-            } else {
-                StartScreenView {
-                    isGameStarted = true
+                VStack {
+                    Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog()})
+                    Spacer()
+//                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
                 }
-                .edgesIgnoringSafeArea(.all)
             }
+        } else {
+            StartScreenView {
+                isGameStarted = true
+            }
+            .edgesIgnoringSafeArea(.all)
         }
+    }
 }
 
 struct StartScreenView: View {

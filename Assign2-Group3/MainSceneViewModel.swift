@@ -18,4 +18,12 @@ class MainSceneViewModel: ObservableObject {
     func resetCameraPosition() {
         scene.resetCameraPosition()
     }
+    
+    func toggleFog() {
+        scene.toggleFog()
+    }
+    
+//    func toggleFlashlight() {
+//        scene.toggleFlashlight()
+//    }
 }
