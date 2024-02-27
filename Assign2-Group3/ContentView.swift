@@ -13,21 +13,30 @@ struct ContentView: View {
     
     var body: some View {
             if isGameStarted {
-                SceneKitView(scene: mainSceneViewModel.scene)
-                    .gesture(DragGesture().onChanged { value in
-                        let sensitivity: Float = 0.01 // Adjust the sensitivity of the drag
-                        let cameraXOffset = Float(value.translation.width) * sensitivity
-                        let cameraZOffset = -Float(value.translation.height) * sensitivity
+                ZStack{
+                    SceneKitView(scene: mainSceneViewModel.scene)
+                        .gesture(DragGesture().onChanged { value in
+                            let sensitivity: Float = 0.01 // Adjust the sensitivity of the drag
+                            let cameraXOffset = Float(value.translation.width) * sensitivity
+                            let cameraZOffset = -Float(value.translation.height) * sensitivity
+                            
+                            mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
+                            
+                        })
+                        .edgesIgnoringSafeArea(.all)
                         
-                        mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
-                    })
-                    .edgesIgnoringSafeArea(.all)
+                    VStack{
+                        Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
+                        Spacer()
+                    }
+                }
             } else {
                 StartScreenView {
                     isGameStarted = true
                 }
                 .edgesIgnoringSafeArea(.all)
             }
+
         }
 }
 

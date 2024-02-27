@@ -14,6 +14,9 @@ class MainScene: SCNScene {
     var cameraZOffset: Float = 5
     var rotAngle = 0.0
     let mazeWrapper: MazeWrapper = MazeWrapper(rows: 10, columns: 10)
+    var daylight = true
+    var ambientLight = SCNNode()
+    var spotlight = SCNNode()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -27,6 +30,7 @@ class MainScene: SCNScene {
         background.contents = UIColor.black
         
         setupCamera()
+        setupLight()
         addMazeToScene()
         addRotatingTexturedCube()
         
@@ -79,18 +83,25 @@ class MainScene: SCNScene {
         cameraNode.position = SCNVector3(cameraXOffset, cameraZOffset, cameraZOffset)
     }
   
+    func setupLight(){
+        
+        ambientLight.light = SCNLight()
+        ambientLight.light!.type = .ambient
+        ambientLight.light!.color = UIColor.white
+        ambientLight.light!.intensity = 1000
+        rootNode.addChildNode(ambientLight)
+        spotlight.light = SCNLight()//If I don't add another non-ambient light into the scene it doesn't diable the default ambient light
+        spotlight.light?.type = .directional
+        spotlight.light?.intensity = 0
+        rootNode.addChildNode(spotlight)
+        
+    }
+    
     // MAZE // ////////////
     func addMazeToScene() {
         mazeWrapper.createMaze()
             
         let cellSize: CGFloat = 1.0
-        
-        let colors: [CompassDirection: UIColor] = [
-            .dNORTH: .red,
-            .dEAST: .green,
-            .dSOUTH: .blue,
-            .dWEST: .yellow
-        ]
             
         for row in 0..<Int32(mazeWrapper.rows) {
             for col in 0..<Int32(mazeWrapper.columns) {
@@ -105,40 +116,82 @@ class MainScene: SCNScene {
                         var height: CGFloat = cellSize
                         var length: CGFloat = cellSize
                         var positionAdjustment = SCNVector3Zero // Adjustment to align walls properly
-                        
+                        var leftWall = false
+                        var rightWall = false
                         // Adjust dimensions and position for different directions
                         switch direction {
                         case .dNORTH:
                             width = cellSize
                             length = 0.1
-                            positionAdjustment = SCNVector3(0, 0, -cellSize/2)
+                            positionAdjustment = SCNVector3(0, 0, -cellSize/2+0.01)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 3)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 1)){
+                                rightWall = true
+                            }
                         case .dEAST:
                             width = 0.1
                             length = cellSize
-                            positionAdjustment = SCNVector3(cellSize/2, 0, 0)
+                            positionAdjustment = SCNVector3(cellSize/2-0.01, 0, 0)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 0)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 2)){
+                                rightWall = true
+                            }
                         case .dSOUTH:
                             width = cellSize
                             length = 0.1
-                            positionAdjustment = SCNVector3(0, 0, cellSize/2)
+                            positionAdjustment = SCNVector3(0, 0, cellSize/2-0.01)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 1)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 3)){
+                                rightWall = true
+                            }
                         case .dWEST:
                             width = 0.1
                             length = cellSize
-                            positionAdjustment = SCNVector3(-cellSize/2, 0, 0)
+                            positionAdjustment = SCNVector3(-cellSize/2+0.01, 0, 0)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 2)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 0)){
+                                rightWall = true
+                            }
                         }
                         
-                        let color = colors[direction] ?? .white
+                        let texture : UIImage?
+                        
+                        if(!leftWall && !rightWall){
+                            texture = UIImage(named: "stonewall.jpeg")
+                        }else if(leftWall && !rightWall){
+                            texture = UIImage(named: "brickwall.jpg")
+                        }else if(!leftWall && rightWall){
+                            texture = UIImage(named: "stone.jpg")
+                        }else{
+                            texture = UIImage(named: "wood.avif")
+                        }
                         
                         let material = SCNMaterial()
-                        material.diffuse.contents = color
+                        material.diffuse.contents = texture
                         
                         let wallGeometry = SCNBox(width: width, height: height, length: length, chamferRadius: 0)
                         wallGeometry.materials = [material] // Apply material to geometry
-                        
                         let wallNode = SCNNode(geometry: wallGeometry)
                         wallNode.position = SCNVector3Make(position.x + positionAdjustment.x, position.y + positionAdjustment.y, position.z + positionAdjustment.z)
+                        
                         mazeNode.addChildNode(wallNode)
-
                     }
+                    
+                    let floorGeometry = SCNBox(width: cellSize, height: 0.01, length: cellSize, chamferRadius: 0)
+                    let floorMaterial = SCNMaterial()
+                    floorMaterial.diffuse.contents = UIImage(named: "grass.avif")
+                    floorGeometry.materials = [floorMaterial]
+                    let floorNode = SCNNode(geometry: floorGeometry)
+                    floorNode.position = SCNVector3Make(position.x, position.y - Float(cellSize/2), position.z)
+                    mazeNode.addChildNode(floorNode)
                 }
                 
             }
@@ -147,7 +200,14 @@ class MainScene: SCNScene {
             rootNode.addChildNode(mazeNode)
         }
 
-
+    func toggleDaylight(){
+        if(daylight){
+            ambientLight.light?.intensity = 100
+        }else{
+            ambientLight.light?.intensity = 1000
+        }
+        daylight = !daylight
+    }
     
    
 }
