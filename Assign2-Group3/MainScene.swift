@@ -45,12 +45,16 @@ class MainScene: SCNScene {
     func updateCameraPosition(cameraXOffset: Float, cameraZOffset: Float) {
         // Moves camera to player on first touch
         if (!touched) {
-            cameraNode.position = SCNVector3(0,0,0)
-            cameraNode.eulerAngles = SCNVector3(0,-Float.pi/2,0)
+            cameraNode.position = SCNVector3(0,0,-1)
+            cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
             touched = true
         }
-        if (cameraXOffset * 1000 < 2 && cameraXOffset * 1000 > -2 && cameraZOffset != 0) {
-            cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraZOffset, 0)
+        if (cameraZOffset * 1000 < 2 && cameraZOffset * 1000 > -2 && cameraXOffset != 0) {
+            if (cameraNode.eulerAngles.y < Float.pi || cameraNode.eulerAngles.y > -3*Float.pi) {
+                cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
+            } else {
+                cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+            }
         }
         else {
             cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
