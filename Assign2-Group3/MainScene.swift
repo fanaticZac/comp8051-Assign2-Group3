@@ -13,6 +13,9 @@ class MainScene: SCNScene {
     var cameraYOffset: Float = 20
     var cameraZOffset: Float = 5
     let mazeWrapper: MazeWrapper = MazeWrapper(rows: 10, columns: 10)
+    var daylight = true
+    var ambientLight = SCNNode()
+    var spotlight = SCNNode()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -26,6 +29,7 @@ class MainScene: SCNScene {
         background.contents = UIColor.black
         
         setupCamera()
+        setupLight()
         addMazeToScene()
     }
     
@@ -45,6 +49,20 @@ class MainScene: SCNScene {
         cameraNode.position = SCNVector3(cameraXOffset, cameraZOffset, cameraZOffset)
     }
   
+    func setupLight(){
+        
+        ambientLight.light = SCNLight()
+        ambientLight.light!.type = .ambient
+        ambientLight.light!.color = UIColor.white
+        ambientLight.light!.intensity = 1000
+        rootNode.addChildNode(ambientLight)
+        spotlight.light = SCNLight()//If I don't add another non-ambient light into the scene it doesn't diable the default ambient light
+        spotlight.light?.type = .directional
+        spotlight.light?.intensity = 0
+        rootNode.addChildNode(spotlight)
+        
+    }
+    
     // MAZE // ////////////
     func addMazeToScene() {
         mazeWrapper.createMaze()
@@ -148,7 +166,14 @@ class MainScene: SCNScene {
             rootNode.addChildNode(mazeNode)
         }
 
-
+    func toggleDaylight(){
+        if(daylight){
+            ambientLight.light?.intensity = 100
+        }else{
+            ambientLight.light?.intensity = 1000
+        }
+        daylight = !daylight
+    }
     
    
 }
