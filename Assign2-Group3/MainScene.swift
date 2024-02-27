@@ -71,7 +71,7 @@ class MainScene: SCNScene {
                         case .dNORTH:
                             width = cellSize
                             length = 0.1
-                            positionAdjustment = SCNVector3(0, 0, -cellSize/2+0.001)
+                            positionAdjustment = SCNVector3(0, 0, -cellSize/2+0.01)
                             if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 3)){
                                 leftWall = true
                             }
@@ -81,7 +81,7 @@ class MainScene: SCNScene {
                         case .dEAST:
                             width = 0.1
                             length = cellSize
-                            positionAdjustment = SCNVector3(cellSize/2-0.001, 0, 0)
+                            positionAdjustment = SCNVector3(cellSize/2-0.01, 0, 0)
                             if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 0)){
                                 leftWall = true
                             }
@@ -91,7 +91,7 @@ class MainScene: SCNScene {
                         case .dSOUTH:
                             width = cellSize
                             length = 0.1
-                            positionAdjustment = SCNVector3(0, 0, cellSize/2-0.001)
+                            positionAdjustment = SCNVector3(0, 0, cellSize/2-0.01)
                             if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 1)){
                                 leftWall = true
                             }
@@ -101,7 +101,7 @@ class MainScene: SCNScene {
                         case .dWEST:
                             width = 0.1
                             length = cellSize
-                            positionAdjustment = SCNVector3(-cellSize/2+0.001, 0, 0)
+                            positionAdjustment = SCNVector3(-cellSize/2+0.01, 0, 0)
                             if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 2)){
                                 leftWall = true
                             }
@@ -129,8 +129,17 @@ class MainScene: SCNScene {
                         wallGeometry.materials = [material] // Apply material to geometry
                         let wallNode = SCNNode(geometry: wallGeometry)
                         wallNode.position = SCNVector3Make(position.x + positionAdjustment.x, position.y + positionAdjustment.y, position.z + positionAdjustment.z)
+                        
                         mazeNode.addChildNode(wallNode)
                     }
+                    
+                    let floorGeometry = SCNBox(width: cellSize, height: 0.01, length: cellSize, chamferRadius: 0)
+                    let floorMaterial = SCNMaterial()
+                    floorMaterial.diffuse.contents = UIImage(named: "grass.avif")
+                    floorGeometry.materials = [floorMaterial]
+                    let floorNode = SCNNode(geometry: floorGeometry)
+                    floorNode.position = SCNVector3Make(position.x, position.y - Float(cellSize/2), position.z)
+                    mazeNode.addChildNode(floorNode)
                 }
                 
             }
