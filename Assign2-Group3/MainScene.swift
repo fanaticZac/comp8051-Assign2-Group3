@@ -12,6 +12,7 @@ class MainScene: SCNScene {
     var cameraXOffset: Float = 5
     var cameraYOffset: Float = 20
     var cameraZOffset: Float = 5
+    var rotAngle = 0.0
     let mazeWrapper: MazeWrapper = MazeWrapper(rows: 10, columns: 10)
     
     required init?(coder aDecoder: NSCoder) {
@@ -27,6 +28,11 @@ class MainScene: SCNScene {
         
         setupCamera()
         addMazeToScene()
+        addRotatingTexturedCube()
+        
+        Task(priority: .userInitiated) {
+            await firstUpdate()
+        }
     }
     
     // CAMERA // ////////////
@@ -39,6 +45,34 @@ class MainScene: SCNScene {
         cameraNode.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
 
         rootNode.addChildNode(cameraNode)
+    }
+    
+    func addRotatingTexturedCube(){
+        let theCube = SCNNode(geometry: SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0))
+        theCube.name = "The Cube"
+        theCube.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "crate.jpg")
+        theCube.position = SCNVector3(0,0,0)
+        rootNode.addChildNode(theCube)
+    }
+    
+    @MainActor
+    func firstUpdate() {
+        reanimate() // Call reanimate on the first graphics update frame
+    }
+    
+    @MainActor
+    func reanimate() {
+        let theCube = rootNode.childNode(withName: "The Cube", recursively: true)
+//        if (isRotating) {
+            rotAngle += 0.0005
+            if rotAngle > Double.pi {
+                rotAngle -= Double.pi*2
+            }
+//        }
+        theCube?.eulerAngles = SCNVector3(rotAngle, rotAngle, rotAngle)
+        Task { try! await Task.sleep(nanoseconds: 10000)
+            reanimate()
+        }
     }
     
     func updateCameraPosition(cameraXOffset: Float, cameraZOffset: Float) {
