@@ -37,7 +37,7 @@ class MainScene: SCNScene {
         addMazeToScene()
 
         setupFog()
-//        setupFlashlight()
+        setupFlashlight()
 
         addRotatingTexturedCube()
         
@@ -256,34 +256,22 @@ class MainScene: SCNScene {
 
     }
     
-//    func setupFlashlight() {
-//        let lightNode = SCNNode()
-//        lightNode.name = "Flashlight"
-//        lightNode.light = SCNLight()
-//        lightNode.light!.type = SCNLight.LightType.spot
-//        lightNode.light!.castsShadow = true
-//        lightNode.light!.color = UIColor.green
-//        lightNode.light!.intensity = 0
-//        lightNode.position = SCNVector3(0, 0, 0)
-//        lightNode.rotation = SCNVector4(1, 0, 0, -Double.pi/3)
-//        lightNode.light!.spotInnerAngle = 0
-//        lightNode.light!.spotOuterAngle = 20.0
-//        lightNode.light!.shadowColor = UIColor.black
-//        lightNode.light!.zFar = 500
-//        lightNode.light!.zNear = 50
-//        cameraNode.addChildNode(lightNode)
-//    }
-//    
-//    func toggleFlashlight() {
-//        let flashlight = cameraNode.childNode(withName: "Flashlight", recursively: true)
-//        if (flashlightOn) {
-//            flashlight?.light!.intensity = 0;
-//            flashlightOn = false
-//        }
-//        else {
-//            flashlight?.light!.intensity = 5000;
-//            flashlightOn = true
-//        }
-//    }
+    func setupFlashlight() {
+        cameraNode.light = SCNLight()
+        cameraNode.light!.color = UIColor.white
+        cameraNode.light!.intensity = 0
+        cameraNode.light!.type = .spot
+    }
+    
+    func toggleFlashlight() {
+        if (flashlightOn) {
+            cameraNode.light!.intensity = 0;
+            flashlightOn = false
+        }
+        else {
+            cameraNode.light!.intensity = 5000;
+            flashlightOn = true
+        }
+    }
    
 }

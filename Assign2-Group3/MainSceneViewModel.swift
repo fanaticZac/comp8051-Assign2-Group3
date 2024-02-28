@@ -23,7 +23,7 @@ class MainSceneViewModel: ObservableObject {
         scene.toggleFog()
     }
     
-//    func toggleFlashlight() {
-//        scene.toggleFlashlight()
-//    }
+    func toggleFlashlight() {
+        scene.toggleFlashlight()
+    }
 }

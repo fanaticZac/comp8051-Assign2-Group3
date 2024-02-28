@@ -29,8 +29,8 @@ struct ContentView: View {
                 VStack {
                     Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog()})
                     Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
+                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
                     Spacer()
-                    //                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
                 
                 }
             }
