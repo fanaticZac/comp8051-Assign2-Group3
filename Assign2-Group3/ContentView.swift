@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var isGameStarted = false // State to track if the game has started
     
     var body: some View {
+
         if isGameStarted {
             ZStack {
                 SceneKitView(scene: mainSceneViewModel.scene)
@@ -30,9 +31,8 @@ struct ContentView: View {
                     Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog()})
                     Spacer()
 //                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
+                    }
                 }
-            }
-        } else {
             StartScreenView {
                 isGameStarted = true
             }
@@ -43,25 +43,52 @@ struct ContentView: View {
 
 struct StartScreenView: View {
     var startAction: () -> Void
-    
+        
+    @State private var isShowing = false
+
     var body: some View {
-        VStack {
-            Text("Assign2 - The Maze-ening")
-                .font(.title)
+        ZStack {
+            Color.white.edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                Spacer()
+                
+                Text("Assign2\nThe Maze-ening")
+                    .font(.title)
+                    .foregroundColor(.black)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(5)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.black, lineWidth: 3)
+                    )
+                    .opacity(isShowing ? 1 : 0)
+                    .animation(.easeInOut(duration: 3))
+                
+                Button("Start Game") {
+                    print("Start Game button pressed")
+                    startAction()
+                }
                 .foregroundColor(.white)
                 .padding()
-                .background(Color.blue)
-                .cornerRadius(5)
+                .background(Color.black)
+                .cornerRadius(10)
                 .padding()
-            
-            Button("Start Game") {
-                print("Start Game button pressed")
-                startAction()
+                .opacity(isShowing ? 1 : 0)
+                .animation(.easeInOut(duration: 5))
+                               
+                Spacer()
             }
-            .foregroundColor(.white)
-            .padding()
-            .background(Color.green)
-            .cornerRadius(10)
+        }
+        .onAppear {
+            withAnimation {
+                self.isShowing = true
+            }
         }
     }
 }
+

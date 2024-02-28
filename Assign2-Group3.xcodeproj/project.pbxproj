@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		367F99DD2B8D364A0095FC5B /* stonewall.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 367F99DC2B8D364A0095FC5B /* stonewall.jpeg */; };
+		367F99E12B8D38330095FC5B /* brickwall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 367F99DE2B8D38330095FC5B /* brickwall.jpg */; };
+		367F99E22B8D38330095FC5B /* stone.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 367F99DF2B8D38330095FC5B /* stone.jpg */; };
+		367F99E32B8D38330095FC5B /* wood.avif in Resources */ = {isa = PBXBuildFile; fileRef = 367F99E02B8D38330095FC5B /* wood.avif */; };
+		367F99E52B8D384A0095FC5B /* grass.avif in Resources */ = {isa = PBXBuildFile; fileRef = 367F99E42B8D384A0095FC5B /* grass.avif */; };
 		CEC738872B896035006ADEC7 /* Assign2_Group3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC738862B896035006ADEC7 /* Assign2_Group3App.swift */; };
 		CEC738892B896035006ADEC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC738882B896035006ADEC7 /* ContentView.swift */; };
 		CEC7388B2B896038006ADEC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEC7388A2B896038006ADEC7 /* Assets.xcassets */; };
@@ -20,6 +25,7 @@
 		CED0D0952B8B973500EFFC14 /* MainScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0942B8B973500EFFC14 /* MainScene.swift */; };
 		CED0D0972B8B97F300EFFC14 /* MainSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0962B8B97F300EFFC14 /* MainSceneViewModel.swift */; };
 		CED0D0992B8B991E00EFFC14 /* SceneKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D0982B8B991E00EFFC14 /* SceneKitView.swift */; };
+		CED0D0E72B8E8A8000EFFC14 /* crate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CED0D0E62B8E8A8000EFFC14 /* crate.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +46,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		367F99DC2B8D364A0095FC5B /* stonewall.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stonewall.jpeg; sourceTree = "<group>"; };
+		367F99DE2B8D38330095FC5B /* brickwall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = brickwall.jpg; sourceTree = "<group>"; };
+		367F99DF2B8D38330095FC5B /* stone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stone.jpg; sourceTree = "<group>"; };
+		367F99E02B8D38330095FC5B /* wood.avif */ = {isa = PBXFileReference; lastKnownFileType = file; path = wood.avif; sourceTree = "<group>"; };
+		367F99E42B8D384A0095FC5B /* grass.avif */ = {isa = PBXFileReference; lastKnownFileType = file; path = grass.avif; sourceTree = "<group>"; };
 		CEC738832B896035006ADEC7 /* Assign2-Group3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Assign2-Group3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEC738862B896035006ADEC7 /* Assign2_Group3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assign2_Group3App.swift; sourceTree = "<group>"; };
 		CEC738882B896035006ADEC7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +71,7 @@
 		CED0D0942B8B973500EFFC14 /* MainScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScene.swift; sourceTree = "<group>"; };
 		CED0D0962B8B97F300EFFC14 /* MainSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSceneViewModel.swift; sourceTree = "<group>"; };
 		CED0D0982B8B991E00EFFC14 /* SceneKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitView.swift; sourceTree = "<group>"; };
+		CED0D0E62B8E8A8000EFFC14 /* crate.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crate.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +134,13 @@
 				CED0D0882B8B7B8500EFFC14 /* DisjointSet.h */,
 				CED0D0892B8B7B8500EFFC14 /* Maze.cpp */,
 				CED0D08A2B8B7B8500EFFC14 /* Maze.h */,
+				CED0D0E62B8E8A8000EFFC14 /* crate.jpg */,
 				CEC7388A2B896038006ADEC7 /* Assets.xcassets */,
+				367F99DC2B8D364A0095FC5B /* stonewall.jpeg */,
+				367F99DE2B8D38330095FC5B /* brickwall.jpg */,
+				367F99DF2B8D38330095FC5B /* stone.jpg */,
+				367F99E02B8D38330095FC5B /* wood.avif */,
+				367F99E42B8D384A0095FC5B /* grass.avif */,
 				CEC7388C2B896038006ADEC7 /* Preview Content */,
 			);
 			path = "Assign2-Group3";
@@ -258,8 +276,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED0D0E72B8E8A8000EFFC14 /* crate.jpg in Resources */,
 				CEC7388E2B896038006ADEC7 /* Preview Assets.xcassets in Resources */,
+				367F99E32B8D38330095FC5B /* wood.avif in Resources */,
 				CEC7388B2B896038006ADEC7 /* Assets.xcassets in Resources */,
+				367F99E22B8D38330095FC5B /* stone.jpg in Resources */,
+				367F99E12B8D38330095FC5B /* brickwall.jpg in Resources */,
+				367F99E52B8D384A0095FC5B /* grass.avif in Resources */,
+				367F99DD2B8D364A0095FC5B /* stonewall.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
