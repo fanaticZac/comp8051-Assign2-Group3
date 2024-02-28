@@ -14,6 +14,9 @@ class MainScene: SCNScene {
     var cameraZOffset: Float = 5
     var rotAngle = 0.0
     let mazeWrapper: MazeWrapper = MazeWrapper(rows: 10, columns: 10)
+    var touched = false
+    var fog = false
+    var flashlightOn = false
     var daylight = true
     var ambientLight = SCNNode()
     var spotlight = SCNNode()
@@ -32,11 +35,16 @@ class MainScene: SCNScene {
         setupCamera()
         setupLight()
         addMazeToScene()
+
+        setupFog()
+//        setupFlashlight()
+
         addRotatingTexturedCube()
         
         Task(priority: .userInitiated) {
             await firstUpdate()
         }
+
     }
     
     // CAMERA // ////////////
@@ -80,7 +88,27 @@ class MainScene: SCNScene {
     }
     
     func updateCameraPosition(cameraXOffset: Float, cameraZOffset: Float) {
-        cameraNode.position = SCNVector3(cameraXOffset, cameraZOffset, cameraZOffset)
+        // Moves camera to player on first touch
+        if (!touched) {
+            cameraNode.position = SCNVector3(0,0,-1)
+            cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+            touched = true
+        }
+        if (cameraZOffset * 1000 < 2 && cameraZOffset * 1000 > -2 && cameraXOffset != 0) {
+            if (cameraNode.eulerAngles.y < Float.pi || cameraNode.eulerAngles.y > -3*Float.pi) {
+                cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
+            } else {
+                cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+            }
+        }
+        else {
+            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+        }
+    }
+    
+    func resetCameraPosition() {
+        cameraNode.position = SCNVector3(0,0,0)
+        cameraNode.eulerAngles = SCNVector3(0,-Float.pi/2,0)
     }
   
     func setupLight(){
@@ -200,6 +228,24 @@ class MainScene: SCNScene {
             rootNode.addChildNode(mazeNode)
         }
 
+
+    func setupFog() {
+        fogColor = UIColor.white
+        fogStartDistance = 0.0
+        fogEndDistance = 0.0
+        fogDensityExponent = 3.0
+    }
+    
+    func toggleFog() {
+        if (!fog) {
+            fogEndDistance = 2.0
+            fog = true
+        } else {
+            fogEndDistance = 0.0
+            fog = false
+        }
+    }
+
     func toggleDaylight(){
         if(daylight){
             ambientLight.light?.intensity = 100
@@ -207,7 +253,37 @@ class MainScene: SCNScene {
             ambientLight.light?.intensity = 1000
         }
         daylight = !daylight
+
     }
     
+//    func setupFlashlight() {
+//        let lightNode = SCNNode()
+//        lightNode.name = "Flashlight"
+//        lightNode.light = SCNLight()
+//        lightNode.light!.type = SCNLight.LightType.spot
+//        lightNode.light!.castsShadow = true
+//        lightNode.light!.color = UIColor.green
+//        lightNode.light!.intensity = 0
+//        lightNode.position = SCNVector3(0, 0, 0)
+//        lightNode.rotation = SCNVector4(1, 0, 0, -Double.pi/3)
+//        lightNode.light!.spotInnerAngle = 0
+//        lightNode.light!.spotOuterAngle = 20.0
+//        lightNode.light!.shadowColor = UIColor.black
+//        lightNode.light!.zFar = 500
+//        lightNode.light!.zNear = 50
+//        cameraNode.addChildNode(lightNode)
+//    }
+//    
+//    func toggleFlashlight() {
+//        let flashlight = cameraNode.childNode(withName: "Flashlight", recursively: true)
+//        if (flashlightOn) {
+//            flashlight?.light!.intensity = 0;
+//            flashlightOn = false
+//        }
+//        else {
+//            flashlight?.light!.intensity = 5000;
+//            flashlightOn = true
+//        }
+//    }
    
 }
