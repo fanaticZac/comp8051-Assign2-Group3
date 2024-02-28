@@ -9,7 +9,7 @@ import SceneKit
 class MainScene: SCNScene {
     var cameraNode = SCNNode()
     var mazeNode = SCNNode()
-    var cameraXOffset: Float = 5
+    var cameraXOffset: Float = 4.5
     var cameraYOffset: Float = 20
     var cameraZOffset: Float = 5
     var rotAngle = 0.0
@@ -233,12 +233,13 @@ class MainScene: SCNScene {
         fogColor = UIColor.white
         fogStartDistance = 0.0
         fogEndDistance = 0.0
-        fogDensityExponent = 3.0
+        fogDensityExponent = 2.0
     }
     
-    func toggleFog() {
+    func toggleFog(distance: CGFloat, density: CGFloat) {
         if (!fog) {
-            fogEndDistance = 2.0
+            fogEndDistance = distance
+            fogDensityExponent = density
             fog = true
         } else {
             fogEndDistance = 0.0

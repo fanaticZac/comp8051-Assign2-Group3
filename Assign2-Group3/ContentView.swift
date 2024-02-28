@@ -10,6 +10,8 @@ import SceneKit
 struct ContentView: View {
     @StateObject var mainSceneViewModel = MainSceneViewModel()
     @State private var isGameStarted = false // State to track if the game has started
+    @State private var fogDistance = 5.0
+    @State private var fogDensity = 1.0
     
     var body: some View {
         if isGameStarted {
@@ -27,11 +29,14 @@ struct ContentView: View {
                     }
                     .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog()})
+                    Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog(distance: fogDistance, density: fogDensity)})
                     Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
                     Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
                     Spacer()
-                
+                    Text("Fog Distance").foregroundColor(.white)
+                    Slider(value: $fogDistance, in:0...10.0, step: 1, label: {Text("Fog Distance").foregroundColor(.white)}, minimumValueLabel: {Text("0").foregroundColor(.white)}, maximumValueLabel: {Text("10").foregroundColor(.white)})
+                    Text("Fog Density").foregroundColor(.white)
+                    Slider(value: $fogDensity, in:1...2, step:1, label: {Text("Fog Density").foregroundColor(.white)}, minimumValueLabel: {Text("Linear").foregroundColor(.white)}, maximumValueLabel: {Text("Exponential").foregroundColor(.white)})
                 }
             }
         } else {
