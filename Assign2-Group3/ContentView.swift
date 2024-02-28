@@ -12,32 +12,33 @@ struct ContentView: View {
     @State private var isGameStarted = false // State to track if the game has started
     
     var body: some View {
-            if isGameStarted {
-                ZStack{
-                    SceneKitView(scene: mainSceneViewModel.scene)
-                        .gesture(DragGesture().onChanged { value in
-                            let sensitivity: Float = 0.01 // Adjust the sensitivity of the drag
-                            let cameraXOffset = Float(value.translation.width) * sensitivity
-                            let cameraZOffset = -Float(value.translation.height) * sensitivity
-                            
-                            mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
-                            
-                        })
-                        .edgesIgnoringSafeArea(.all)
+
+        if isGameStarted {
+            ZStack {
+                SceneKitView(scene: mainSceneViewModel.scene)
+                    .gesture(DragGesture().onChanged { value in
+                        let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
+                        let cameraXOffset = Float(value.translation.width) * sensitivity
+                        let cameraZOffset = -Float(value.translation.height) * sensitivity
                         
-                    VStack{
-                        Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
-                        Spacer()
+                        mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
+                    })
+                    .onTapGesture(count:2) {
+                        mainSceneViewModel.scene.resetCameraPosition()
+                    }
+                    .edgesIgnoringSafeArea(.all)
+                VStack {
+                    Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog()})
+                    Spacer()
+//                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
                     }
                 }
-            } else {
-                StartScreenView {
-                    isGameStarted = true
-                }
-                .edgesIgnoringSafeArea(.all)
+            StartScreenView {
+                isGameStarted = true
             }
-
+            .edgesIgnoringSafeArea(.all)
         }
+    }
 }
 
 struct StartScreenView: View {
