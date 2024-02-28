@@ -14,4 +14,16 @@ class MainSceneViewModel: ObservableObject {
     func updateCameraPosition(cameraXOffset: Float, cameraYOffset: Float) {
         scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraYOffset)
     }
+    
+    func resetCameraPosition() {
+        scene.resetCameraPosition()
+    }
+    
+    func toggleFog() {
+        scene.toggleFog()
+    }
+    
+//    func toggleFlashlight() {
+//        scene.toggleFlashlight()
+//    }
 }
