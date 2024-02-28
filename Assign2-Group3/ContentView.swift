@@ -30,7 +30,8 @@ struct ContentView: View {
                     Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog()})
                     Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
                     Spacer()
-//                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
+                    //                    Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
+                
                 }
             }
         } else {

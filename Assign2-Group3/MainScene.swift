@@ -244,6 +244,7 @@ class MainScene: SCNScene {
             fogEndDistance = 0.0
             fog = false
         }
+    }
 
     func toggleDaylight(){
         if(daylight){
