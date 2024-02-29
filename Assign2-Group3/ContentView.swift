@@ -24,14 +24,20 @@ struct ContentView: View {
                         
                         mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
                     })
+
                     .onTapGesture(count:2) {
                         mainSceneViewModel.scene.resetCameraPosition()
+                    }
+                    // Creating the double finger double tap requires a complete rewrite of our structure
+                    .onTapGesture(count:1) {
+                        mainSceneViewModel.scene.toggleConsole()
                     }
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog(distance: fogDistance, density: fogDensity)})
                     Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
                     Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
+//                  Button("Toggle Console", action: {mainSceneViewModel.scene.toggleConsole()})
                     Spacer()
                     Text("Fog Distance").foregroundColor(.white)
                     Slider(value: $fogDistance, in:0...10.0, step: 1, label: {Text("Fog Distance").foregroundColor(.white)}, minimumValueLabel: {Text("0").foregroundColor(.white)}, maximumValueLabel: {Text("10").foregroundColor(.white)})

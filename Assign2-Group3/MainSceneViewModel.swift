@@ -26,4 +26,8 @@ class MainSceneViewModel: ObservableObject {
     func toggleFlashlight() {
         scene.toggleFlashlight()
     }
+    
+    func toggleConsole() {
+        scene.toggleConsole()
+    }
 }
