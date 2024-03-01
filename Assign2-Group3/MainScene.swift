@@ -101,23 +101,20 @@ class MainScene: SCNScene {
                 cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
                 if (console) {
                     mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, mapNode.eulerAngles.z)
-                    mapNode.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, mapNode.eulerAngles.z)
                 }
             } else {
                 cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
                 if (console) {
                     mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
                     mapNode.position = SCNVector3(cameraNode.position.x, mapNode.position.y, cameraNode.position.z)
-                    mapNode.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
                 }
             }
         }
         else {
             cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
             if (console) {
-                mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1 + cameraXOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, cameraNode.position.z * 0.1 + cameraZOffset * 0.1)
-                mapNode.childNode(withName: "Player Orientation", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1 + cameraXOffset * 0.1, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.y, cameraNode.position.z * 0.1 + cameraZOffset * 0.1)
-                mapNode.position = SCNVector3(mapNode.position.x + cameraXOffset, mapNode.position.y, mapNode.position.z + cameraZOffset)
+                mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Position", recursively: true)!.position.x + cameraXOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, mapNode.childNode(withName: "Player Position", recursively: true)!.position.z + cameraZOffset * 0.1)
+                mapNode.childNode(withName: "Player Orientation", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.x + cameraXOffset * 0.1, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.y, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.z + cameraZOffset * 0.1)
             }
         }
     }
@@ -125,6 +122,11 @@ class MainScene: SCNScene {
     func resetCameraPosition() {
         cameraNode.position = SCNVector3(0,0,-1)
         cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+        if (console) {
+            mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, cameraNode.position.z * 0.1)
+            mapNode.childNode(withName: "Player Orientation", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.y, cameraNode.position.z * 0.1 + 0.03)
+            mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y, mapNode.eulerAngles.z)
+        }
     }
   
     func setupLight(){
@@ -409,9 +411,9 @@ class MainScene: SCNScene {
             let playerPosition = cameraNode.position
             let playerRotation = cameraNode.eulerAngles
             createMiniMaze()
-            rootNode.addChildNode(mapNode)
-            mapNode.position = SCNVector3(playerPosition.x + 0.5, playerPosition.y + 0.5, playerPosition.z + 2)
-            mapNode.eulerAngles = SCNVector3(Float.pi/2, playerRotation.y, playerRotation.z)
+            cameraNode.addChildNode(mapNode)
+            mapNode.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+            mapNode.position = SCNVector3(-0.45, 0.5, -2)
             mapNode.opacity = 0.5
             console = true
         }
