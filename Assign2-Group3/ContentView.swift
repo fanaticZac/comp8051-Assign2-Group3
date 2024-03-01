@@ -16,7 +16,7 @@ struct ContentView: View {
     var body: some View {
         if isGameStarted {
             ZStack {
-                SceneKitView(scene: mainSceneViewModel.scene)
+                SceneKitView(scene: mainSceneViewModel.scene, mainSceneViewModel: mainSceneViewModel)
                     .gesture(DragGesture().onChanged { value in
                         let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
                         let cameraXOffset = Float(value.translation.width) * sensitivity
@@ -24,13 +24,8 @@ struct ContentView: View {
                         
                         mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
                     })
-
                     .onTapGesture(count:2) {
                         mainSceneViewModel.scene.resetCameraPosition()
-                    }
-                    // Creating the double finger double tap requires a complete rewrite of our structure
-                    .onTapGesture(count:1) {
-                        mainSceneViewModel.scene.toggleConsole()
                     }
                     .edgesIgnoringSafeArea(.all)
                 VStack {
