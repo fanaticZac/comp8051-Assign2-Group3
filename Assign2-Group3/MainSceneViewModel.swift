@@ -19,11 +19,15 @@ class MainSceneViewModel: ObservableObject {
         scene.resetCameraPosition()
     }
     
-    func toggleFog() {
-        scene.toggleFog()
+    func toggleFog(distance: CGFloat, density: CGFloat) {
+        scene.toggleFog(distance: distance, density: density)
     }
     
-//    func toggleFlashlight() {
-//        scene.toggleFlashlight()
-//    }
+    func toggleFlashlight() {
+        scene.toggleFlashlight()
+    }
+    
+    func toggleConsole() {
+        scene.toggleConsole()
+    }
 }
