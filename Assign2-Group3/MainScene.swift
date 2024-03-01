@@ -123,7 +123,7 @@ class MainScene: SCNScene {
     }
     
     func resetCameraPosition() {
-        cameraNode.position = SCNVector3(0,0,0)
+        cameraNode.position = SCNVector3(0,0,-1)
         cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
     }
   
