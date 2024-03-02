@@ -100,21 +100,23 @@ class MainScene: SCNScene {
             if (cameraNode.eulerAngles.y < Float.pi || cameraNode.eulerAngles.y > -3*Float.pi) {
                 cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
                 if (console) {
-                    mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, mapNode.eulerAngles.z)
+                    mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, cameraNode.eulerAngles.z)
                 }
             } else {
                 cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
                 if (console) {
-                    mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
+                    mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
                     mapNode.position = SCNVector3(cameraNode.position.x, mapNode.position.y, cameraNode.position.z)
                 }
             }
         }
         else {
-            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+            let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
+            cameraNode.position = SCNVector3(cameraNode.position.x + forwardVector.x * cameraZOffset, 0, cameraNode.position.z + forwardVector.z * cameraZOffset)
+                        //OLD
+            //            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
             if (console) {
-                mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Position", recursively: true)!.position.x + cameraXOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, mapNode.childNode(withName: "Player Position", recursively: true)!.position.z + cameraZOffset * 0.1)
-                mapNode.childNode(withName: "Player Orientation", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.x + cameraXOffset * 0.1, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.y, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.z + cameraZOffset * 0.1)
+                mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Position", recursively: true)!.position.x + forwardVector.x * cameraZOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, mapNode.childNode(withName: "Player Position", recursively: true)!.position.z + forwardVector.z * cameraZOffset * 0.1)
             }
         }
     }
@@ -124,7 +126,6 @@ class MainScene: SCNScene {
         cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
         if (console) {
             mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, cameraNode.position.z * 0.1)
-            mapNode.childNode(withName: "Player Orientation", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1, mapNode.childNode(withName: "Player Orientation", recursively: true)!.position.y, cameraNode.position.z * 0.1 + 0.03)
             mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y, mapNode.eulerAngles.z)
         }
     }
@@ -392,6 +393,7 @@ class MainScene: SCNScene {
         characterGeometry.materials = [characterMaterial]
         let characterNode = SCNNode(geometry: characterGeometry)
         characterNode.position = SCNVector3Make(playerPosition.x * 0.1, playerPosition.y, playerPosition.z * 0.1)
+        characterNode.eulerAngles = SCNVector3(0, Float.pi, 0)
         characterNode.name = "Player Position"
         mapNode.addChildNode(characterNode)
         
@@ -401,10 +403,11 @@ class MainScene: SCNScene {
         orientationMaterial.diffuse.contents = UIColor.blue
         orientationGeometry.materials = [orientationMaterial]
         let orientationNode = SCNNode(geometry: orientationGeometry)
-        orientationNode.position = SCNVector3Make(playerPosition.x * 0.1, playerPosition.y, playerPosition.z * 0.1 + 0.03)
-        orientationNode.eulerAngles = SCNVector3(Float.pi / 2, playerRotation.y, playerRotation.z)
+        let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
+        orientationNode.position = SCNVector3Make(forwardVector.x * -0.03, 0, forwardVector.z * -0.03)
+        orientationNode.eulerAngles = SCNVector3(-Float.pi / 2, playerRotation.y, playerRotation.z)
         orientationNode.name = "Player Orientation"
-        mapNode.addChildNode(orientationNode)
+        characterNode.addChildNode(orientationNode)
     }
     func toggleConsole() {
         if (!console) {
