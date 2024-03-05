@@ -61,6 +61,7 @@
 		CEC7389D2B896039006ADEC7 /* Assign2-Group3UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Assign2-Group3UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEC738A12B896039006ADEC7 /* Assign2_Group3UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assign2_Group3UITests.swift; sourceTree = "<group>"; };
 		CEC738A32B896039006ADEC7 /* Assign2_Group3UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assign2_Group3UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CECB46372B92B09400ACCBA1 /* ReadMe.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
 		CED0D0872B8B7B8300EFFC14 /* Assign2-Group3-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Assign2-Group3-Bridging-Header.h"; sourceTree = "<group>"; };
 		CED0D0882B8B7B8500EFFC14 /* DisjointSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisjointSet.h; sourceTree = "<group>"; };
 		CED0D0892B8B7B8500EFFC14 /* Maze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Maze.cpp; sourceTree = "<group>"; };
@@ -102,6 +103,7 @@
 		CEC7387A2B896035006ADEC7 = {
 			isa = PBXGroup;
 			children = (
+				CECB46372B92B09400ACCBA1 /* ReadMe.md */,
 				CEC738852B896035006ADEC7 /* Assign2-Group3 */,
 				CEC738962B896038006ADEC7 /* Assign2-Group3Tests */,
 				CEC738A02B896039006ADEC7 /* Assign2-Group3UITests */,
