@@ -9,7 +9,8 @@ import SceneKit
 class MainScene: SCNScene {
     var cameraNode = SCNNode()
     var mazeNode = SCNNode()
-    var cameraXOffset: Float = 5
+    var mapNode = SCNNode()
+    var cameraXOffset: Float = 4.5
     var cameraYOffset: Float = 20
     var cameraZOffset: Float = 5
     var rotAngle = 0.0
@@ -18,8 +19,10 @@ class MainScene: SCNScene {
     var fog = false
     var flashlightOn = false
     var daylight = true
+    var console = false
     var ambientLight = SCNNode()
     var spotlight = SCNNode()
+    var modelAnimationFlag = true
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -35,16 +38,73 @@ class MainScene: SCNScene {
         setupCamera()
         setupLight()
         addMazeToScene()
-
+        
         setupFog()
-//        setupFlashlight()
-
+        setupFlashlight()
+        
         addRotatingTexturedCube()
+        
+        setupModel()
         
         Task(priority: .userInitiated) {
             await firstUpdate()
         }
-
+        
+    }
+    
+    // MODEL OPPONENT // ////////////
+    // LIKE MODEL CITIZEN // BUT MORE EVIL ////////////
+    
+    // Textures - came with model
+    func setupModel() {
+        // Load the model
+        let spider = loadModelFromFile(modelName: "Only_Spider_with_Animations_Export", fileExtension: "dae")
+        spider.position = SCNVector3(0, -0.5, 0)
+        spider.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
+        spider.scale = SCNVector3(0.002, 0.002, 0.002)
+        
+        //        printNodeHierarchy(spider)
+        
+        // Load texture image
+        let textureImage = UIImage(named: "Spinnen_Bein_tex.jpg")
+        let normalMapImage = UIImage(named: "normal_map_texture.jpg")
+                
+        // Create material
+        let material = SCNMaterial()
+        material.diffuse.contents = textureImage
+        material.normal.contents = normalMapImage
+                
+        // Apply material to spider fur node
+        let spiderBod = spider.childNode(withName: "Spider", recursively: true)
+        
+        // Dae had eyes and teeth but was missing body textures
+       let spiderBodGeometry = spiderBod?.geometry
+        spiderBodGeometry?.materials = [material]
+        
+        let spiderFur = spider.childNode(withName: "Spider_Fur", recursively: true)
+       let spiderFurGeometry = spiderFur?.geometry
+        spiderFurGeometry?.materials = [material]
+        
+        rootNode.addChildNode(spider)
+    }
+    
+    func printNodeHierarchy(_ node: SCNNode, level: Int = 0) {
+        let indent = String(repeating: "  ", count: level)
+        print("\(indent)\(node.name ?? "Unnamed Node")")
+        for childNode in node.childNodes {
+            printNodeHierarchy(childNode, level: level + 1)
+        }
+    }
+    
+    
+    // BORROWED FROM LAB BUT USEFUL FUNCTION
+    func loadModelFromFile(modelName:String, fileExtension:String) -> SCNReferenceNode {
+        
+        let url = Bundle.main.url(forResource: modelName, withExtension: fileExtension)
+        let refNode = SCNReferenceNode(url: url!)
+        refNode?.load()
+        refNode?.name = modelName
+        return refNode!
     }
     
     // CAMERA // ////////////
@@ -52,10 +112,10 @@ class MainScene: SCNScene {
         let camera = SCNCamera()
         cameraNode.camera = camera
         cameraNode.position = SCNVector3(cameraXOffset, cameraYOffset, cameraZOffset)
-     
+        
         // temp - just to look down
         cameraNode.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
-
+        
         rootNode.addChildNode(cameraNode)
     }
     
@@ -75,12 +135,12 @@ class MainScene: SCNScene {
     @MainActor
     func reanimate() {
         let theCube = rootNode.childNode(withName: "The Cube", recursively: true)
-//        if (isRotating) {
-            rotAngle += 0.0005
-            if rotAngle > Double.pi {
-                rotAngle -= Double.pi*2
-            }
-//        }
+        //        if (isRotating) {
+        rotAngle += 0.0005
+        if rotAngle > Double.pi {
+            rotAngle -= Double.pi*2
+        }
+        //        }
         theCube?.eulerAngles = SCNVector3(rotAngle, rotAngle, rotAngle)
         Task { try! await Task.sleep(nanoseconds: 10000)
             reanimate()
@@ -97,20 +157,37 @@ class MainScene: SCNScene {
         if (cameraZOffset * 1000 < 2 && cameraZOffset * 1000 > -2 && cameraXOffset != 0) {
             if (cameraNode.eulerAngles.y < Float.pi || cameraNode.eulerAngles.y > -3*Float.pi) {
                 cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
+                if (console) {
+                    mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, cameraNode.eulerAngles.z)
+                }
             } else {
                 cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+                if (console) {
+                    mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
+                    mapNode.position = SCNVector3(cameraNode.position.x, mapNode.position.y, cameraNode.position.z)
+                }
             }
         }
         else {
-            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+            let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
+            cameraNode.position = SCNVector3(cameraNode.position.x + forwardVector.x * cameraZOffset, 0, cameraNode.position.z + forwardVector.z * cameraZOffset)
+            //OLD
+            //            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+            if (console) {
+                mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Position", recursively: true)!.position.x + forwardVector.x * cameraZOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, mapNode.childNode(withName: "Player Position", recursively: true)!.position.z + forwardVector.z * cameraZOffset * 0.1)
+            }
         }
     }
     
     func resetCameraPosition() {
-        cameraNode.position = SCNVector3(0,0,0)
-        cameraNode.eulerAngles = SCNVector3(0,-Float.pi/2,0)
+        cameraNode.position = SCNVector3(0,0,-1)
+        cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+        if (console) {
+            mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, cameraNode.position.z * 0.1)
+            mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y, mapNode.eulerAngles.z)
+        }
     }
-  
+    
     func setupLight(){
         
         ambientLight.light = SCNLight()
@@ -128,9 +205,9 @@ class MainScene: SCNScene {
     // MAZE // ////////////
     func addMazeToScene() {
         mazeWrapper.createMaze()
-            
+        
         let cellSize: CGFloat = 1.0
-            
+        
         for row in 0..<Int32(mazeWrapper.rows) {
             for col in 0..<Int32(mazeWrapper.columns) {
                 for direction in [CompassDirection.dNORTH, .dEAST, .dSOUTH, .dWEST] {
@@ -224,28 +301,29 @@ class MainScene: SCNScene {
                 
             }
         }
-            
-            rootNode.addChildNode(mazeNode)
-        }
-
-
+        
+        rootNode.addChildNode(mazeNode)
+    }
+    
+    
     func setupFog() {
         fogColor = UIColor.white
         fogStartDistance = 0.0
         fogEndDistance = 0.0
-        fogDensityExponent = 3.0
+        fogDensityExponent = 2.0
     }
     
-    func toggleFog() {
+    func toggleFog(distance: CGFloat, density: CGFloat) {
         if (!fog) {
-            fogEndDistance = 2.0
+            fogEndDistance = distance
+            fogDensityExponent = density
             fog = true
         } else {
             fogEndDistance = 0.0
             fog = false
         }
     }
-
+    
     func toggleDaylight(){
         if(daylight){
             ambientLight.light?.intensity = 100
@@ -253,37 +331,156 @@ class MainScene: SCNScene {
             ambientLight.light?.intensity = 1000
         }
         daylight = !daylight
-
+        
     }
     
-//    func setupFlashlight() {
-//        let lightNode = SCNNode()
-//        lightNode.name = "Flashlight"
-//        lightNode.light = SCNLight()
-//        lightNode.light!.type = SCNLight.LightType.spot
-//        lightNode.light!.castsShadow = true
-//        lightNode.light!.color = UIColor.green
-//        lightNode.light!.intensity = 0
-//        lightNode.position = SCNVector3(0, 0, 0)
-//        lightNode.rotation = SCNVector4(1, 0, 0, -Double.pi/3)
-//        lightNode.light!.spotInnerAngle = 0
-//        lightNode.light!.spotOuterAngle = 20.0
-//        lightNode.light!.shadowColor = UIColor.black
-//        lightNode.light!.zFar = 500
-//        lightNode.light!.zNear = 50
-//        cameraNode.addChildNode(lightNode)
-//    }
-//    
-//    func toggleFlashlight() {
-//        let flashlight = cameraNode.childNode(withName: "Flashlight", recursively: true)
-//        if (flashlightOn) {
-//            flashlight?.light!.intensity = 0;
-//            flashlightOn = false
-//        }
-//        else {
-//            flashlight?.light!.intensity = 5000;
-//            flashlightOn = true
-//        }
-//    }
-   
+    func setupFlashlight() {
+        cameraNode.light = SCNLight()
+        cameraNode.light!.color = UIColor.white
+        cameraNode.light!.intensity = 0
+        cameraNode.light!.type = .spot
+    }
+    
+    func toggleFlashlight() {
+        if (flashlightOn) {
+            cameraNode.light!.intensity = 0;
+            flashlightOn = false
+        }
+        else {
+            cameraNode.light!.intensity = 5000;
+            flashlightOn = true
+        }
+    }
+    
+    func createMiniMaze() {
+        
+        let cellSize: CGFloat = 0.1
+        
+        let playerPosition = cameraNode.position
+        let playerRotation = cameraNode.eulerAngles
+        
+        for row in 0..<Int32(mazeWrapper.rows) {
+            for col in 0..<Int32(mazeWrapper.columns) {
+                for direction in [CompassDirection.dNORTH, .dEAST, .dSOUTH, .dWEST] {
+                    let cell = mazeWrapper.isWallPresent(atRow: Int32(row), column: Int32(col), direction: Int32(direction.rawValue))
+                    
+                    let position = SCNVector3(x: Float(col) * Float(cellSize), y: 0, z: Float(row) * Float(cellSize))
+                    
+                    // Create geometry for each wall based on cell data
+                    if cell {
+                        var width: CGFloat = cellSize
+                        var height: CGFloat = cellSize
+                        var length: CGFloat = cellSize
+                        var positionAdjustment = SCNVector3Zero // Adjustment to align walls properly
+                        var leftWall = false
+                        var rightWall = false
+                        // Adjust dimensions and position for different directions
+                        switch direction {
+                        case .dNORTH:
+                            width = cellSize
+                            length = 0.01
+                            positionAdjustment = SCNVector3(0, 0, -cellSize/2+0.01)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 3)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 1)){
+                                rightWall = true
+                            }
+                        case .dEAST:
+                            width = 0.01
+                            length = cellSize
+                            positionAdjustment = SCNVector3(cellSize/2-0.01, 0, 0)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 0)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 2)){
+                                rightWall = true
+                            }
+                        case .dSOUTH:
+                            width = cellSize
+                            length = 0.01
+                            positionAdjustment = SCNVector3(0, 0, cellSize/2-0.01)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 1)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 3)){
+                                rightWall = true
+                            }
+                        case .dWEST:
+                            width = 0.01
+                            length = cellSize
+                            positionAdjustment = SCNVector3(-cellSize/2+0.01, 0, 0)
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 2)){
+                                leftWall = true
+                            }
+                            if(mazeWrapper.isWallPresent(atRow: row, column: col, direction: 0)){
+                                rightWall = true
+                            }
+                        }
+                        
+                        let texture : UIImage?
+                        
+                        if(!leftWall && !rightWall){
+                            texture = UIImage(named: "stonewall.jpeg")
+                        }else if(leftWall && !rightWall){
+                            texture = UIImage(named: "brickwall.jpg")
+                        }else if(!leftWall && rightWall){
+                            texture = UIImage(named: "stone.jpg")
+                        }else{
+                            texture = UIImage(named: "wood.avif")
+                        }
+                        
+                        let material = SCNMaterial()
+                        material.diffuse.contents = texture
+                        
+                        let wallGeometry = SCNBox(width: width, height: 0.01, length: length, chamferRadius: 0)
+                        wallGeometry.materials = [material] // Apply material to geometry
+                        let wallNode = SCNNode(geometry: wallGeometry)
+                        wallNode.position = SCNVector3Make(position.x + positionAdjustment.x, position.y + positionAdjustment.y, position.z + positionAdjustment.z)
+                        
+                        mapNode.addChildNode(wallNode)
+                    }
+                }
+                
+            }
+        }
+        mapNode.childNode(withName: "Player Position", recursively: true)?.removeFromParentNode()
+        let characterGeometry = SCNSphere(radius: 0.01)
+        let characterMaterial = SCNMaterial()
+        characterMaterial.diffuse.contents = UIColor.red
+        characterGeometry.materials = [characterMaterial]
+        let characterNode = SCNNode(geometry: characterGeometry)
+        characterNode.position = SCNVector3Make(playerPosition.x * 0.1, playerPosition.y, playerPosition.z * 0.1)
+        characterNode.eulerAngles = SCNVector3(0, Float.pi, 0)
+        characterNode.name = "Player Position"
+        mapNode.addChildNode(characterNode)
+        
+        mapNode.childNode(withName: "Player Orientation", recursively: true)?.removeFromParentNode()
+        let orientationGeometry = SCNCone(topRadius: 0.01, bottomRadius: 0.05, height: 0.05)
+        let orientationMaterial = SCNMaterial()
+        orientationMaterial.diffuse.contents = UIColor.blue
+        orientationGeometry.materials = [orientationMaterial]
+        let orientationNode = SCNNode(geometry: orientationGeometry)
+        let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
+        orientationNode.position = SCNVector3Make(forwardVector.x * -0.03, 0, forwardVector.z * -0.03)
+        orientationNode.eulerAngles = SCNVector3(-Float.pi / 2, playerRotation.y, playerRotation.z)
+        orientationNode.name = "Player Orientation"
+        characterNode.addChildNode(orientationNode)
+    }
+    func toggleConsole() {
+        if (!console) {
+            let playerPosition = cameraNode.position
+            let playerRotation = cameraNode.eulerAngles
+            createMiniMaze()
+            cameraNode.addChildNode(mapNode)
+            mapNode.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+            mapNode.position = SCNVector3(-0.45, 0.5, -2)
+            mapNode.opacity = 0.5
+            console = true
+        }
+        else {
+            mapNode.removeFromParentNode()
+            console = false
+        }
+    }
 }
