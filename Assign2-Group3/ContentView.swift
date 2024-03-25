@@ -26,6 +26,7 @@ struct ContentView: View {
                     })
                     .onTapGesture(count:2) {
                         mainSceneViewModel.scene.resetCameraPosition()
+                    
                     }
                     .edgesIgnoringSafeArea(.all)
                 VStack {

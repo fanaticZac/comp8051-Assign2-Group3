@@ -16,6 +16,7 @@ struct SceneKitView: UIViewRepresentable {
     func makeUIView(context: Context) -> SCNView {
         let scnView = SCNView(frame: .zero)
         scnView.scene = scene
+
         
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator,
                                                                  action: #selector(Coordinator.handleDoubleTap(_:)))
