@@ -6,7 +6,12 @@
 //
 import SceneKit
 
-class MainScene: SCNScene {
+struct PhysicsCategory {
+    static let wall = 1 << 0
+    static let spider = 1 << 1
+}
+
+class MainScene: SCNScene, SCNPhysicsContactDelegate{
     var cameraNode = SCNNode()
     var mazeNode = SCNNode()
     var mapNode = SCNNode()
@@ -22,7 +27,11 @@ class MainScene: SCNScene {
     var console = false
     var ambientLight = SCNNode()
     var spotlight = SCNNode()
+    var spiderPos = SCNVector3(-0.2, -0.5, -0.2)
+    var spiderRot = SCNVector3(0, 0, 0)
+    var spider = SCNNode()
     var modelAnimationFlag = true
+    var spiderMove = false
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -46,6 +55,11 @@ class MainScene: SCNScene {
         
         setupModel()
         
+        self.physicsWorld.contactDelegate = self
+        
+        spiderMove = true
+        spiderRot = SCNVector3(0.0003, 0, 0.0003)
+
         Task(priority: .userInitiated) {
             await firstUpdate()
         }
@@ -58,7 +72,7 @@ class MainScene: SCNScene {
     // Textures - came with model
     func setupModel() {
         // Load the model
-        let spider = loadModelFromFile(modelName: "Only_Spider_with_Animations_Export", fileExtension: "dae")
+        spider = loadModelFromFile(modelName: "Only_Spider_with_Animations_Export", fileExtension: "dae")
         spider.position = SCNVector3(0, -0.5, 0)
         spider.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
         spider.scale = SCNVector3(0.002, 0.002, 0.002)
@@ -85,7 +99,37 @@ class MainScene: SCNScene {
        let spiderFurGeometry = spiderFur?.geometry
         spiderFurGeometry?.materials = [material]
         
+        let sphere = SCNSphere(radius: 0.2)
+        let physicsShape = SCNPhysicsShape(geometry: sphere)
+        spider.physicsBody = SCNPhysicsBody(type: .kinematic, shape: physicsShape)
+        spider.physicsBody?.categoryBitMask = PhysicsCategory.spider
+        spider.physicsBody?.contactTestBitMask = PhysicsCategory.wall
+        
         rootNode.addChildNode(spider)
+    }
+    
+    func spiderRotate(vertical: Bool){
+        spiderPos = SCNVector3(spiderPos.x - 5*spiderRot.x, spiderPos.y, spiderPos.z - 5*spiderRot.z)
+        spider.position = spiderPos
+
+        if(vertical){
+            spiderRot.x = -spiderRot.x
+        }else{
+            spiderRot.z = -spiderRot.z
+        }
+    }
+    
+    func physicsWorld(_ world:SCNPhysicsWorld, didBegin contact: SCNPhysicsContact){
+        let contactMask = contact.nodeA.physicsBody!.categoryBitMask | contact.nodeB.physicsBody!.categoryBitMask
+        if contactMask == (PhysicsCategory.spider | PhysicsCategory.wall) {
+            print("Collide")
+            if(abs(contact.contactNormal.x) > abs(contact.contactNormal.z)){
+                spiderRotate(vertical: true)
+            }else{
+                spiderRotate(vertical: false)
+            }
+            
+        }
     }
     
     func printNodeHierarchy(_ node: SCNNode, level: Int = 0) {
@@ -142,6 +186,18 @@ class MainScene: SCNScene {
         }
         //        }
         theCube?.eulerAngles = SCNVector3(rotAngle, rotAngle, rotAngle)
+        
+        spiderPos = SCNVector3(spiderPos.x + spiderRot.x, spiderPos.y, spiderPos.z + spiderRot.z)
+        spider.position = spiderPos
+        if(spiderMove){
+            if(spiderPos.x < -0.4 || spiderPos.x > 9.4){
+                spiderRotate(vertical: true)
+            }
+            if(spiderPos.z < -0.4 || spiderPos.z > 9.4){
+                spiderRotate(vertical: false)
+            }
+        }
+        
         Task { try! await Task.sleep(nanoseconds: 10000)
             reanimate()
         }
@@ -286,6 +342,10 @@ class MainScene: SCNScene {
                         wallGeometry.materials = [material] // Apply material to geometry
                         let wallNode = SCNNode(geometry: wallGeometry)
                         wallNode.position = SCNVector3Make(position.x + positionAdjustment.x, position.y + positionAdjustment.y, position.z + positionAdjustment.z)
+                        
+                        wallNode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: wallGeometry))
+                        wallNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+                        wallNode.physicsBody?.contactTestBitMask = PhysicsCategory.spider
                         
                         mazeNode.addChildNode(wallNode)
                     }
