@@ -17,23 +17,23 @@ struct ContentView: View {
         if isGameStarted {
             ZStack {
                 SceneKitView(scene: mainSceneViewModel.scene, mainSceneViewModel: mainSceneViewModel)
-                    .gesture(DragGesture().onChanged { value in
-                        let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
-                        let cameraXOffset = Float(value.translation.width) * sensitivity
-                        let cameraZOffset = -Float(value.translation.height) * sensitivity
-                        
-                        mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
-                    })
-                    .onTapGesture(count:2) {
-                        mainSceneViewModel.scene.resetCameraPosition()
-                    
-                    }
+//                    .gesture(DragGesture().onChanged { value in
+//                        let sensitivity: Float = 0.0001 // Adjust the sensitivity of the drag
+//                        let cameraXOffset = Float(value.translation.width) * sensitivity
+//                        let cameraZOffset = -Float(value.translation.height) * sensitivity
+//                        
+//                        mainSceneViewModel.scene.updateCameraPosition(cameraXOffset: cameraXOffset, cameraZOffset: cameraZOffset)
+//                    })
+//                    .onTapGesture(count:2) {
+//                        mainSceneViewModel.scene.resetCameraPosition()
+//                    
+//                    }
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Button("Toggle Fog", action: {mainSceneViewModel.scene.toggleFog(distance: fogDistance, density: fogDensity)})
                     Button("Toggle Daylight", action: {mainSceneViewModel.scene.toggleDaylight()})
                     Button("Toggle Flashlight", action: {mainSceneViewModel.scene.toggleFlashlight()})
-//                  Button("Toggle Console", action: {mainSceneViewModel.scene.toggleConsole()})
+//                    Button("Toggle Console", action: {mainSceneViewModel.scene.toggleConsole()})
                     Spacer()
                     Text("Fog Distance").foregroundColor(.white)
                     Slider(value: $fogDistance, in:0...10.0, step: 1, label: {Text("Fog Distance").foregroundColor(.white)}, minimumValueLabel: {Text("0").foregroundColor(.white)}, maximumValueLabel: {Text("10").foregroundColor(.white)})
