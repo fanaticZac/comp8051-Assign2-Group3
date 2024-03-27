@@ -207,6 +207,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
         if (spiderMove) {
             spiderMove = false
         } else {
+            // Reset spider position
             spider.position = SCNVector3(0, -0.5, 0)
             spider.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
             spider.scale = SCNVector3(0.002, 0.002, 0.002)
@@ -215,6 +216,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
     }
     
     func manuallyUpdateSpiderPosition(rotateAngle: Float, movement: Float) {
+        // Check if spider is not moving and if character and spider are in same cell
         if (!spiderMove && floorf(cameraNode.position.x) == floorf(spider.position.x) && floorf(cameraNode.position.z) == floorf(spider.position.z)) {
             if (movement * 1000 < 2 && movement * 1000 > -2 && cameraXOffset != 0) {
                 spider.eulerAngles = SCNVector3(spider.eulerAngles.x, spider.eulerAngles.y + rotateAngle, spider.eulerAngles.z)
@@ -228,6 +230,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
     }
     
     func manualZoom(scale: Float) {
+        // Check if spider is not moving and if character and spider are in same cell
         if (!spiderMove && floorf(cameraNode.position.x) == floorf(spider.position.x) && floorf(cameraNode.position.z) == floorf(spider.position.z)) {
             spider.scale = SCNVector3(spider.scale.x + scale, spider.scale.y + scale, spider.scale.z + scale)
         }
@@ -272,6 +275,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
             mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(cameraNode.position.x * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, cameraNode.position.z * 0.1)
             mapNode.childNode(withName: "Player Orientation", recursively: true)!.eulerAngles = SCNVector3(mapNode.eulerAngles.x, cameraNode.eulerAngles.y, mapNode.eulerAngles.z)
         }
+        // Reset spider position
         spider.position = SCNVector3(0, -0.5, 0)
         spider.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
         spider.scale = SCNVector3(0.002, 0.002, 0.002)
