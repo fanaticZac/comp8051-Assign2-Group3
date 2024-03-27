@@ -30,4 +30,16 @@ class MainSceneViewModel: ObservableObject {
     func toggleConsole() {
         scene.toggleConsole()
     }
+    
+    func toggleSpiderAnimation() {
+        scene.toggleSpiderAnimation()
+    }
+    
+    func manuallyUpdateSpiderPosition(rotateAngle: Float, movement: Float) {
+        scene.manuallyUpdateSpiderPosition(rotateAngle: rotateAngle, movement: movement)
+    }
+    
+    func manualZoom(scale: Float) {
+        scene.manualZoom(scale: scale)
+    }
 }
