@@ -79,6 +79,8 @@ struct SceneKitView: UIViewRepresentable {
                     } else {
                         mainSceneViewModel.updateCameraPosition(cameraXOffset: cameraXOffset, cameraYOffset: cameraZOffset)
                     }
+                } else {
+                    mainSceneViewModel.updateCameraPosition(cameraXOffset: cameraXOffset, cameraYOffset: cameraZOffset)
                 }
             }
         }
