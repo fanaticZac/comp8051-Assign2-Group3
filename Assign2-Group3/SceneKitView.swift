@@ -98,13 +98,13 @@ struct SceneKitView: UIViewRepresentable {
             }
         }
         
-        @objc func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        @objc func handleTripleTap(_ gestureRecognizer: UITapGestureRecognizer) {
             if gestureRecognizer.state == .recognized {
                 mainSceneViewModel.scene.toggleConsole()
             }
         }
         
-        @objc func handleTripleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        @objc func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
             if gestureRecognizer.state == .recognized {
                 let p = gestureRecognizer.location(in: view)
                 let hitResults = view.hitTest(p, options: [:])
