@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var fogDensity = 1.0
     
     var body: some View {
-        if isGameStarted {
+       // if isGameStarted {
             ZStack {
                 SceneKitView(scene: mainSceneViewModel.scene, mainSceneViewModel: mainSceneViewModel)
 //                    .gesture(DragGesture().onChanged { value in
@@ -41,13 +41,13 @@ struct ContentView: View {
                     Slider(value: $fogDensity, in:1...2, step:1, label: {Text("Fog Density").foregroundColor(.white)}, minimumValueLabel: {Text("Linear").foregroundColor(.white)}, maximumValueLabel: {Text("Exponential").foregroundColor(.white)})
                 }
             }
-        } else {
+        } /*else {
             StartScreenView {
                 isGameStarted = true
             }
             .edgesIgnoringSafeArea(.all)
         }
-    }
+    }*/
 }
 
 struct StartScreenView: View {

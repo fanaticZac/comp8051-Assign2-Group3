@@ -75,6 +75,7 @@ struct SceneKitView: UIViewRepresentable {
                 if (hitResults.count > 0) {
                     let results = hitResults[0]
                     if (results.node.name == "Spider") {
+                        print("spider drag")
                         mainSceneViewModel.manuallyUpdateSpiderPosition(rotateAngle: cameraXOffset, movement: cameraZOffset)
                     } else {
                         mainSceneViewModel.updateCameraPosition(cameraXOffset: cameraXOffset, cameraYOffset: cameraZOffset)

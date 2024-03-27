@@ -58,7 +58,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
         self.physicsWorld.contactDelegate = self
         
         spiderMove = true
-        spiderRot = SCNVector3(0.0003, 0, 0.0003)
+        spiderRot = SCNVector3(0.0001, 0, 0.0001)
 
         Task(priority: .userInitiated) {
             await firstUpdate()
@@ -156,6 +156,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
         let camera = SCNCamera()
         cameraNode.camera = camera
         cameraNode.position = SCNVector3(cameraXOffset, cameraYOffset, cameraZOffset)
+        cameraNode.camera?.zNear = 0.01
         
         // temp - just to look down
         cameraNode.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
@@ -204,6 +205,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
     }
     
     func toggleSpiderAnimation() {
+        print("hit")
         if (spiderMove) {
             spiderMove = false
         } else {
@@ -217,12 +219,13 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
     
     func manuallyUpdateSpiderPosition(rotateAngle: Float, movement: Float) {
         // Check if spider is not moving and if character and spider are in same cell
-        if (!spiderMove && floorf(cameraNode.position.x) == floorf(spider.position.x) && floorf(cameraNode.position.z) == floorf(spider.position.z)) {
+        if (!spiderMove /*&& floorf(cameraNode.position.x) == floorf(spider.position.x) && floorf(cameraNode.position.z) == floorf(spider.position.z)*/) {
+            print("zach")
             if (movement * 1000 < 2 && movement * 1000 > -2 && cameraXOffset != 0) {
                 spider.eulerAngles = SCNVector3(spider.eulerAngles.x, spider.eulerAngles.y + rotateAngle, spider.eulerAngles.z)
             } else {
                 let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
-                spider.position = SCNVector3(spider.position.x + forwardVector.x * movement, 0, spider.position.z + forwardVector.z * movement)
+                spider.position = SCNVector3(spider.position.x + forwardVector.x + 0.1/**movement */, -0.5, spider.position.z + forwardVector.z + 0.1/** movement*/)
             }
         } else {
             updateCameraPosition(cameraXOffset: rotateAngle, cameraZOffset: movement)
