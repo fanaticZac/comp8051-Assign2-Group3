@@ -208,7 +208,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
             spiderMove = false
         } else {
             // Reset spider position
-            spider.position = SCNVector3(0, -0.5, 0)
+            spider.position = spiderPos
             spider.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
             spider.scale = SCNVector3(0.002, 0.002, 0.002)
             spiderMove = true
@@ -237,33 +237,35 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
     }
     
     func updateCameraPosition(cameraXOffset: Float, cameraZOffset: Float) {
-        // Moves camera to player on first touch
-        if (!touched) {
-            cameraNode.position = SCNVector3(0,0,-1)
-            cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
-            touched = true
-        }
-        if (cameraZOffset * 1000 < 2 && cameraZOffset * 1000 > -2 && cameraXOffset != 0) {
-            if (cameraNode.eulerAngles.y < Float.pi || cameraNode.eulerAngles.y > -3*Float.pi) {
-                cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
-                if (console) {
-                    mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, cameraNode.eulerAngles.z)
-                }
-            } else {
+        if (spiderMove) {
+            // Moves camera to player on first touch
+            if (!touched) {
+                cameraNode.position = SCNVector3(0,0,-1)
                 cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
-                if (console) {
-                    mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
-                    mapNode.position = SCNVector3(cameraNode.position.x, mapNode.position.y, cameraNode.position.z)
+                touched = true
+            }
+            if (cameraZOffset * 1000 < 2 && cameraZOffset * 1000 > -2 && cameraXOffset != 0) {
+                if (cameraNode.eulerAngles.y < Float.pi || cameraNode.eulerAngles.y > -3*Float.pi) {
+                    cameraNode.eulerAngles = SCNVector3(0, cameraNode.eulerAngles.y + cameraXOffset, 0)
+                    if (console) {
+                        mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, cameraNode.eulerAngles.y + cameraXOffset, cameraNode.eulerAngles.z)
+                    }
+                } else {
+                    cameraNode.eulerAngles = SCNVector3(0,-Float.pi,0)
+                    if (console) {
+                        mapNode.childNode(withName: "Player Position", recursively: true)!.eulerAngles = SCNVector3(cameraNode.eulerAngles.x, -Float.pi, cameraNode.eulerAngles.z)
+                        mapNode.position = SCNVector3(cameraNode.position.x, mapNode.position.y, cameraNode.position.z)
+                    }
                 }
             }
-        }
-        else {
-            let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
-            cameraNode.position = SCNVector3(cameraNode.position.x + forwardVector.x * cameraZOffset, 0, cameraNode.position.z + forwardVector.z * cameraZOffset)
-            //OLD
-            //            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
-            if (console) {
-                mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Position", recursively: true)!.position.x + forwardVector.x * cameraZOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, mapNode.childNode(withName: "Player Position", recursively: true)!.position.z + forwardVector.z * cameraZOffset * 0.1)
+            else {
+                let forwardVector = SCNVector3(-sin(cameraNode.eulerAngles.y), 0, -cos(cameraNode.eulerAngles.y))
+                cameraNode.position = SCNVector3(cameraNode.position.x + forwardVector.x * cameraZOffset, 0, cameraNode.position.z + forwardVector.z * cameraZOffset)
+                //OLD
+                //            cameraNode.position = SCNVector3(cameraNode.position.x + cameraXOffset, 0, cameraNode.position.z + cameraZOffset)
+                if (console) {
+                    mapNode.childNode(withName: "Player Position", recursively: true)!.position = SCNVector3(mapNode.childNode(withName: "Player Position", recursively: true)!.position.x + forwardVector.x * cameraZOffset * 0.1, mapNode.childNode(withName: "Player Position", recursively: true)!.position.y, mapNode.childNode(withName: "Player Position", recursively: true)!.position.z + forwardVector.z * cameraZOffset * 0.1)
+                }
             }
         }
     }
@@ -279,6 +281,7 @@ class MainScene: SCNScene, SCNPhysicsContactDelegate{
         spider.position = SCNVector3(0, -0.5, 0)
         spider.eulerAngles = SCNVector3(-Float.pi/2, 0, 0)
         spider.scale = SCNVector3(0.002, 0.002, 0.002)
+        spiderMove = true
     }
     
     func setupLight(){
